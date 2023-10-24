@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: duck-lake
+Version: 0.0.0
+Requires-Dist: dagster
+Requires-Dist: duckdb
+Requires-Dist: dagster-duckdb-pandas
+Requires-Dist: dagster-duckdb
+Requires-Dist: dagster-gcp
+Requires-Dist: pandas
+Requires-Dist: pyarrow
+Requires-Dist: dbt-core
+Requires-Dist: dagster-dbt
+Requires-Dist: dbt-duckdb
+Provides-Extra: dev
+Requires-Dist: dagster-webserver; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: google-cloud-storage; extra == "dev"
+Requires-Dist: google-auth; extra == "dev"

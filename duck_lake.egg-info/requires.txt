@@ -1,0 +1,16 @@
+dagster
+duckdb
+dagster-duckdb-pandas
+dagster-duckdb
+dagster-gcp
+pandas
+pyarrow
+dbt-core
+dagster-dbt
+dbt-duckdb
+
+[dev]
+dagster-webserver
+pytest
+google-cloud-storage
+google-auth
