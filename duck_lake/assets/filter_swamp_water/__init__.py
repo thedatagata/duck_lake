@@ -14,7 +14,8 @@ from dagster import (
     Out,
     Output,
     graph_asset,
-    multi_asset, 
+    multi_asset,
+    AssetIn,
     AssetOut,
 )
 
@@ -47,7 +48,7 @@ def filter_swamp_water(ga_data):
     ga_data['session_order_cnt'] = ga_data['totals'].apply(lambda x: int(x['transactions']) if 'transactions' in x else 0)
     ga_data['session_pageview_cnt'] = ga_data['totals'].apply(lambda x: int(x['pageviews']) if 'pageviews' in x else 0) 
     ga_data['session_duration'] = ga_data['totals'].apply(lambda x: int(x['timeOnSite']) if 'timeOnSite' in x else 0)
-    ga_data['session_is_new_visit'] = ga_data['totals'].apply(lambda x: (int(x['newVisits'])==1) if 'newVisits' in x else False)
+    ga_data['session_is_first_visit'] = ga_data['totals'].apply(lambda x: (int(x['newVisits'])==1) if 'newVisits' in x else False)
     ga_data.drop(columns=['device','geoNetwork','totals','trafficSource'], inplace=True)
     ga_data.loc[ga_data['session_city'].str.contains('available'), 'session_city'] = None
     ga_data.loc[ga_data['session_region'].str.contains('available'), 'session_region'] = None
@@ -61,11 +62,11 @@ def filter_swamp_water(ga_data):
     return Output(ga_data)
 
 @graph_asset
-def filter_swamp_water():
+def process_swamp_water():
     filtered_swamp_water = filter_swamp_water(get_swamp_water())
     return filtered_swamp_water 
 
-@multi_asset(outs={'sessions_df': AssetOut(io_manager_key="gcs_io"), 'events_df': AssetOut(io_manager_key="gcs_io")})
+@multi_asset(ins={"filtered_swamp_water":AssetIn("process_swamp_water")},outs={'sessions_df': AssetOut(io_manager_key="gcs_io"), 'events_df': AssetOut(io_manager_key="gcs_io")})
 def get_filtered_swamp_water(filtered_swamp_water):
 
     def filter_keys(event_list):
@@ -94,9 +95,9 @@ def get_filtered_swamp_water(filtered_swamp_water):
             pageview_list[i]['pageview_timestamp'] = current_timestamp.strftime('%Y-%m-%d %H:%M:%S')
         return pageview_list
     
-    session_cols = ['session_marketing_channel','session_date','user_id','session_id','session_sequence_number','session_start_time','session_browser','session_os','session_is_mobile','session_device_category','session_country','session_city','session_region','session_source','session_medium','session_revenue','session_total_revenue','session_order_cnt','session_pageview_cnt','session_duration','session_is_new_visit','session_landing_screen','session_exit_screen']
+    session_cols = ['session_marketing_channel','session_date','user_id','session_id','session_sequence_number','session_start_time','session_browser','session_os','session_is_mobile','session_device_category','session_country','session_city','session_region','session_source','session_medium','session_revenue','session_total_revenue','session_order_cnt','session_pageview_cnt','session_duration','session_is_first_visit','session_landing_screen','session_exit_screen']
     sessions_df = filtered_swamp_water[session_cols]
-    event_cols = ['user_id','session_id','session_date','session_events'] 
+    event_cols = ['user_id','session_id','session_start_time','session_date','session_events'] 
     events_df = filtered_swamp_water[event_cols]
     events_df['session_events'] = events_df['session_events'].apply(filter_keys)
     events_df['session_pageviews'] = events_df.apply(lambda row: construct_pageview_event_list(row['session_events'], row['session_date']), axis=1)

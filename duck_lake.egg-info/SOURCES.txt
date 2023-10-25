@@ -12,5 +12,6 @@ duck_lake/assets/__init__.py
 duck_lake/assets/fill_duck_lake/__init__.py
 duck_lake/assets/filter_swamp_water/__init__.py
 duck_lake/assets/lake_models/__init__.py
+duck_lake/configs/__init__.py
 duck_lake/constants/__init__.py
 duck_lake/jobs/__init__.py

@@ -13,7 +13,7 @@ load_data_config = {
         }
     },
     "ops":{
-        "filter_swamp_water":{
+        "process_swamp_water":{
             "ops":{
                 "get_swamp_water":{
                     "config":{

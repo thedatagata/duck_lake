@@ -8,9 +8,9 @@ pyarrow
 dbt-core
 dagster-dbt
 dbt-duckdb
+fsspec
+gcsfs
 
 [dev]
 dagster-webserver
 pytest
-google-cloud-storage
-google-auth

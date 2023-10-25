@@ -11,8 +11,8 @@ Requires-Dist: pyarrow
 Requires-Dist: dbt-core
 Requires-Dist: dagster-dbt
 Requires-Dist: dbt-duckdb
+Requires-Dist: fsspec
+Requires-Dist: gcsfs
 Provides-Extra: dev
 Requires-Dist: dagster-webserver; extra == "dev"
 Requires-Dist: pytest; extra == "dev"
-Requires-Dist: google-cloud-storage; extra == "dev"
-Requires-Dist: google-auth; extra == "dev"

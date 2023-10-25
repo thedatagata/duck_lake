@@ -20,7 +20,7 @@ sources:
           - name: session_order_cnt
           - name: session_revenue 
           - name: session_total_revenue 
-          - name: session_is_new_user
+          - name: session_is_first_visit
           - name: session_duration
           - name: session_os 
           - name: session_is_mobile

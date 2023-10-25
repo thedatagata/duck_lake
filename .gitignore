@@ -1,7 +1,10 @@
 .env 
 data_warehouse 
-dbt_project/dbt_packages 
-dbt_project/logs 
-dbt_project/target 
-dbt_project/.user.yml 
-dbt_project/profiles.yml
+duck_lake_models/dbt_packages 
+duck_lake_models/logs 
+duck_lake_models/target 
+duck_lake_models/.user.yml 
+duck_lake_models/profiles.yml
+__pycache__
+.python-version 
+duck_lake.egg-info

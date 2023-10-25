@@ -1,26 +1,24 @@
 import pandas as pd
 import duckdb 
-import uuid 
-from io import BytesIO
+import uuid
 from dagster import (
     asset, 
-    AssetIn,
-    AssetOut,
+    AssetIn
 )
 
 @asset(
         key="pond_sessions", 
-        ins={"sessions_df": AssetIn("gcs_io")},
-        outs={"pageviews_df": AssetOut(io_manager_key="db_io")}
+        ins={"sessions_df": AssetIn("sessions_df")},
+        io_manager_key="db_io"
     )
 def fill_pond_sessions(sessions_df) -> pd.DataFrame:
-    sessions_cols_ordered = ['session_id','session_start_time','session_sequence_number','session_date','session_pageview_cnt','session_order_cnt','session_revenue','session_total_revenue','session_is_new_user','session_duration','session_os','session_is_mobile','session_device_category','session_browser','session_landing_screen','session_exit_screen','session_source','session_medium','session_marketing_channel','session_city','session_region','session_country']
+    sessions_cols_ordered = ['session_id','session_start_time','session_sequence_number','session_date','session_pageview_cnt','session_order_cnt','session_revenue','session_total_revenue','session_is_first_visit','session_duration','session_os','session_is_mobile','session_device_category','session_browser','session_landing_screen','session_exit_screen','session_source','session_medium','session_marketing_channel','session_city','session_region','session_country']
     return sessions_df[sessions_cols_ordered]
 
 @asset(
         key="pond_pageviews", 
-        ins={"pageviews_df": AssetIn(io_manager_key="gcs_io")}, 
-        outs={"pageviews_df": AssetOut(io_manager_key="db_io")}
+        ins={"pageviews_df": AssetIn("events_df")}, 
+        io_manager_key="db_io"
     )
 def fill_pond_pageviews(pageviews_df) -> pd.DataFrame:
     db = duckdb.connect(database=':memory:', read_only=False)
