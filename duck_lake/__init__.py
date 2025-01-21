@@ -10,8 +10,6 @@ from dagster_dbt import DbtCliResource
 
 from dagster import Definitions 
 
-print()
-
 defs = Definitions(
     assets=[*clean_source_data_assets, *load_source_data_assets, dbt_model_assets],
     resources={
